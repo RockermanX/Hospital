@@ -1,0 +1,216 @@
+create database Hospital;
+use Hospital;
+create table Estado(
+cod int,
+tipo varchar(50),
+primary key(cod)
+);
+
+create table Sede(
+cod int,
+consultorio varchar(30),
+direccion varchar(30),
+primary key(cod)
+);
+
+create table Horario_c(
+cod int, 
+hora_c time,
+primary key(cod)
+);
+
+create table Cod_tipo_id_paciente(
+cod int,
+tipo varchar(50),
+primary key(cod)
+);
+
+create table Municipio(
+cod int,
+nombre varchar(100),
+primary key(cod)
+);
+
+create table Paciente(
+num_id int,
+nombre varchar(100),
+fecha_nac date,
+cod_tipo_id int,
+cod_municipio int,
+foreign key(cod_tipo_id)
+references Cod_tipo_id_paciente(cod),
+foreign key(cod_municipio)
+references Municipio(cod),
+primary key(num_id)
+);
+
+create table Telefono_paciente(
+id_paciente int,
+foreign key(id_paciente)
+references Paciente(num_id),
+telefono double,
+primary key(id_paciente, telefono)
+);
+
+create table Cod_tipo_id_medico(
+cod int,
+tipo_id varchar(50),
+primary key(cod)
+);
+
+create table Especialidad(
+cod int,
+nombre varchar(100),
+primary key(cod)
+);
+
+create table Medico(
+num_id int, 
+nombre varchar(100),
+direccion varchar(30),
+cod_tipo int,
+cod_especialidad int,
+hora_i time,
+hora_f time,
+cod_horario int,
+cod_municipio int,
+foreign key(cod_tipo)
+references Cod_tipo_id_medico(cod),
+foreign key(cod_especialidad)
+references Especialidad(cod),
+foreign key(cod_horario)
+references Horario_c(cod),
+foreign key(cod_municipio)
+references Municipio(cod),
+primary key(num_id)
+);
+
+create table Telefono_medico(
+id_medico int,
+foreign key(id_medico)
+references Medico(num_id),
+telefono double,
+primary key(id_medico, telefono)
+);
+
+create table Cita_medica(
+cod int,
+cod_estado int,
+cod_sede int, 
+id_paciente int,
+id_medico int,
+cod_horario int,
+fecha_r date,
+foreign key(cod_estado) 
+references Estado(cod),
+foreign key(cod_sede)
+references Sede(cod),
+foreign key(id_paciente)
+references Paciente(num_id),
+foreign key(id_medico)
+references Medico(num_id),
+foreign key(cod_horario)
+references Horario_c(cod),
+primary key(cod)
+);
+
+insert into Estado values(01,'Programada');
+insert into Estado values(02,'Cumplida');
+insert into Estado values(03,'Incumplida');
+insert into Estado values(04,'Cancelada');
+
+
+insert into Sede values(01,'Maximiliana','cll 40 sur');
+insert into Sede values(02,'Ortiz','dg 65 b sur');
+insert into Sede values(03,'Porvenir','trv 78 norte');
+insert into Sede values(04,'Atlas','cll 10 d norte');
+insert into Sede values(05,'Torres','dg 15 sur');
+
+insert into Horario_c values(01,'09:30');
+insert into Horario_c values(02,'10:00');
+insert into Horario_c values(03,'11:30');
+insert into Horario_c values(04,'08:30');
+insert into Horario_c values(05,'11:00');
+insert into Horario_c values(06,'20:00');
+insert into Horario_c values(07,'15:30');
+insert into Horario_c values(08,'17:00');
+insert into Horario_c values(09,'16:30');
+insert into Horario_c values(10,'14:00');
+
+insert into Cod_tipo_id_paciente values(01,'cc');
+insert into Cod_tipo_id_paciente values(02,'ce');
+insert into Cod_tipo_id_paciente values(03,'ti');
+insert into Cod_tipo_id_paciente values(04,'rc');
+
+insert into Municipio values(100,'Calera');
+insert into Municipio values(200,'Chia');
+insert into Municipio values(300,'Soacha');
+
+insert into Paciente values(10000,'Freddy Rojas','1976-05-21',01,100 );
+insert into Paciente values(20000,'Lady Bernal','2002/6/1',03,200 );
+insert into Paciente values(30000,'Fernando Castro','2000/1/28',01,100 );
+insert into Paciente values(40000,'Santiago Aristoteles','1998/5/31',02,300 );
+insert into Paciente values(50000,'Miguel Perez','2005/9/15',03,200 );
+insert into Paciente values(60000,'Samuel Torres','1783/1/19',02,100 );
+insert into Paciente values(70000,'Diego Ayala','1996/5/31',04,200 );
+insert into Paciente values(80000,'John Wick','2000/6/25',01,100 );
+insert into Paciente values(90000,'Han Solo','1995/12/3',01,300 );
+insert into Paciente values(11000,'David Snchez','1977/2/19',02,300 );
+
+insert into Telefono_paciente values(010000,3205896471);
+insert into Telefono_paciente values(020000,3205568452);
+insert into Telefono_paciente values(030000,3205854849);
+insert into Telefono_paciente values(040000,3205564671);
+insert into Telefono_paciente values(050000,3105219846);
+insert into Telefono_paciente values(060000,3211654855);
+insert into Telefono_paciente values(070000,3000564985);
+insert into Telefono_paciente values(080000,3489446548);
+insert into Telefono_paciente values(090000,5941696471);
+insert into Telefono_paciente values(11000,3206548574);
+
+insert into Cod_tipo_id_medico values(01,'cc');
+insert into Cod_tipo_id_medico values(02,'ce');
+
+insert into Especialidad values(01,'Optamologo');
+insert into Especialidad values(02,'Ginecologo');
+insert into Especialidad values(03,'Pediatra');
+insert into Especialidad values(04,'Dermatologo');
+insert into Especialidad values(05,'Anesteciologo');
+insert into Especialidad values(06,'Odontologo');
+insert into Especialidad values(07,'Urologo');
+
+insert into Medico values(10001,'Juan Garcia','Carrera 7 # 84- 72',01,03,'06:00','14:00',01,100);
+insert into Medico values(10002,'Angel Gomez','Calle 4 No. 5 – 10',01,01,'06:00','14:00',02,200);
+insert into Medico values(10003,'Carmen Garcia','	
+Calle 11 No. 4 - 14',02,02,'06:00','14:00',03,300);
+insert into Medico values(10004,'Antonia Ruiz','Calle 10 No. 5-22',01,04,'06:00','14:00',04,200);
+insert into Medico values(10005,'Carlos Munos','Carrera 20 No. 37-54',01,06,'06:00','14:00',05,200);
+insert into Medico values(10006,'David Serrano','	
+Cr.9 # 74-99',02,05,'14:00','20:00',06,100);
+insert into Medico values(10007,'Lucia Saez','	
+Cr.6 # 17-12',01,07,'14:00','20:00',07,100);
+insert into Medico values(10008,'Marta Lozano','Calle 12# 2-65',02,02,'14:00','20:00',08,300);
+insert into Medico values(10009,'Pablo Rubio','Cl.90 # 11a-54',01,03,'14:00','20:00',09,300);
+insert into Medico values(10011,'Sergio Castillo','Carrera 20 No. 37-54',01,04,'14:00','20:00',10,200);
+
+insert into Telefono_medico values(10001,4563285796);
+insert into Telefono_medico values(10002,5204545546);
+insert into Telefono_medico values(10003,3012456546);
+insert into Telefono_medico values(10004,8795464568);
+insert into Telefono_medico values(10005,6456345230);
+insert into Telefono_medico values(10006,6355045127);
+insert into Telefono_medico values(10007,6302158452);
+insert into Telefono_medico values(10008,7545468655);
+insert into Telefono_medico values(10009,6314254045);
+insert into Telefono_medico values(10011,3546864505);
+
+insert into Cita_medica values(01,01,02,10000,10001,01,'2019/10/15');
+insert into Cita_medica values(02,01,01,20000,10002,02,'2019/10/15');
+insert into Cita_medica values(03,01,02,30000,10003,03,'2019/10/16');
+insert into Cita_medica values(04,01,03,40000,10004,04,'2019/10/16');
+insert into Cita_medica values(05,01,04,50000,10005,05,'2019/10/17');
+insert into Cita_medica values(06,01,02,60000,10006,06,'2019/10/17');
+insert into Cita_medica values(07,01,05,70000,10007,07,'2019/10/18');
+insert into Cita_medica values(08,01,05,80000,10008,08,'2019/10/18');
+insert into Cita_medica values(09,01,01,90000,10009,09,'2019/10/19');
+insert into Cita_medica values(10,01,03,11000,10011,10,'2019/10/19');
