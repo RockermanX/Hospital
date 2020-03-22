@@ -8,8 +8,11 @@ package Control;
 import Modelo.*;
 import Vista.*;
 import java.awt.event.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -142,17 +145,20 @@ public class Controlador implements ActionListener,Runnable{
            }
             
             
-            if(frmPa.getBtnRegistrarP().equals(e.getSource())){
+            if(frmPa.getBtnRegistrarP().equals(e.getSource())){ //condicional registro de paciente
             String tipo_id= String.valueOf(frmPa.getCmbTipoId().getSelectedItem());
             int dd= frmPa.getDataFecha().getCalendar().get(Calendar.DAY_OF_MONTH);
             int mm= (frmPa.getDataFecha().getCalendar().get(Calendar.MONTH)+1);
             int aa= frmPa.getDataFecha().getCalendar().get(Calendar.YEAR);
-            String formatof= (aa+"/"+mm+"/"+"/"+dd);
+            String formatof= (aa+"/"+mm+"/"+dd);
+           if( Validarfecha(formatof)==true){
             Paciente objPa= new Paciente();
             objPa.setTipo_id(tipo_id);
             objPa.setFecha_nac(formatof);
+            if(Validarnombre(frmPa.getTxtNombreP().getText())==true){
             objPa.setNombre(frmPa.getTxtNombreP().getText());
             objPa.setId(Integer.parseInt(frmPa.getTxtIdP().getText()));
+            if(Validarnum(frmPa.getTxtTelefonoP1().getText())==true && Validarnum(frmPa.getTxtTelefonoP2().getText())==true){
             objPa.setTelefono1(frmPa.getTxtTelefonoP1().getText());
             objPa.setTelefono2(frmPa.getTxtTelefonoP2().getText());
             objPa.getObjM().setNombre(frmPa.getTxtMunicipioP().getText());
@@ -161,7 +167,19 @@ public class Controlador implements ActionListener,Runnable{
             //ListaPaciente.add(objPa);
             JOptionPane.showMessageDialog(frmP, objPa.toString());
             LlenarTablaPa(objPa, frmTblP.getTblPaciente());
-            LlenarTelefonoPaciente(objPa, frmTblP.getTblTelefonoP());
+            LlenarTelefonoPaciente(objPa, frmTblP.getTblTelefonoP());    
+            }else{
+                JOptionPane.showMessageDialog(frmP, "error,hemos detectado caracteres alfanumericos en el formulario de los telefonos");   
+            }
+          
+            }else{
+                 JOptionPane.showMessageDialog(frmP, "error,la fecha insertada no es valida,por favor volver a intentar.");   
+            }
+           
+           }else{
+              JOptionPane.showMessageDialog(frmP, "error,la fecha insertada no es valida,por favor volver a intentar.");   
+           }
+          
            }
       
      
@@ -454,7 +472,35 @@ while(i<3){
 return t;
 }
         
+ public boolean Validarnombre(String n){
+     for(int i=0;i<n.length();i++){
+         
+         if(n.charAt(i)==' '){
+             return false;
+         }
+     }
+     return true;
+ }       
+ public boolean Validarfecha(String f){
+   java.util.Date factual = new Date(); 
+    SimpleDateFormat formato=new SimpleDateFormat("yyyy/MM/dd"); 
+    Date fnac = null;
+    try {
+    fnac = formato.parse(f);
+    if(factual.compareTo(fnac) >=0){
+    return true;
+    }else{
+        return false;
+    }
+    
+} catch (ParseException ex) {
+
+ex.printStackTrace();
+
+}
+    return true;
+ }
         
-       
         
+            
 }
